@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ErrorException } from 'src/utils/error.interception';
 
 @Controller('user')
 export class UsersController {
@@ -14,8 +15,12 @@ export class UsersController {
    */
   @Post('create')
   async create(@Body() createUserDto: CreateUserDto) {
-    const response = await this.usersService.create(createUserDto);
-    return { result: response };
+    try {
+      const response = await this.usersService.create(createUserDto);
+      return { result: response };
+    } catch (error) {
+      throw new ErrorException(error);
+    }
   }
   /**
    * get all users list
@@ -23,8 +28,12 @@ export class UsersController {
    */
   @Get('all')
   async getAllUser() {
-    const response = await this.usersService.getAllUser();
-    return { result: response };
+    try {
+      const response = await this.usersService.getAllUser();
+      return { result: response };
+    } catch (error) {
+      throw new ErrorException(error);
+    }
   }
   /**
    * deleting an user by email
@@ -33,8 +42,12 @@ export class UsersController {
    */
   @Get('delete')
   async deleteSingleUserByEmail(email: string) {
-    const response = await this.usersService.deleteUserByEmail(email);
-    return { result: response };
+    try {
+      const response = await this.usersService.deleteUserByEmail(email);
+      return { result: response };
+    } catch (error) {
+      throw new ErrorException(error);
+    }
   }
 
   @Get('test')

@@ -1,6 +1,7 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { ErrorException } from 'src/utils/error.interception';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +15,7 @@ export class AuthController {
       );
       return { result: loginRespose };
     } catch (error) {
-      return { message: error, code: HttpStatus.BAD_REQUEST };
+      throw new ErrorException(error);
     }
   }
 }
