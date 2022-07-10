@@ -8,13 +8,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Response<T> {
-  statusCode: number;
-  message: string;
-  data: T;
+  statusCode?: number;
+  message?: string;
+  result: T;
 }
 
 @Injectable()
-export class ResponseInterceptor<T>
+export class ResponseInterceptor
   implements NestInterceptor<any, Response<any>>
 {
   intercept(
@@ -26,7 +26,7 @@ export class ResponseInterceptor<T>
         statusCode:
           data.code || context.switchToHttp().getResponse().statusCode,
         message: data.message,
-        data: data.result,
+        result: data.result,
       })),
     );
   }
