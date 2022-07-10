@@ -23,7 +23,8 @@ export class ResponseInterceptor<T>
   ): Observable<Response<any>> {
     return next.handle().pipe(
       map((data) => ({
-        statusCode: context.switchToHttp().getResponse().statusCode,
+        statusCode:
+          data.code || context.switchToHttp().getResponse().statusCode,
         message: data.message,
         data: data.result,
       })),

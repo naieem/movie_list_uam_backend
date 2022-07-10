@@ -9,7 +9,7 @@ export class UsersService {
   constructor(@InjectModel('User') private userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.findOneByEmail(createUserDto.email);
+    const user = await this.getSingleUserByEmail(createUserDto.email);
     if (!user) {
       const createdUser = new this.userModel(createUserDto);
       return await createdUser.save();
@@ -19,8 +19,13 @@ export class UsersService {
       );
     }
   }
-
-  async findOneByEmail(email): Promise<any> {
+  async getAllUser(): Promise<any> {
+    return await this.userModel.find();
+  }
+  async deleteUserByEmail(email: string): Promise<any> {
+    return await this.userModel.deleteOne({ email: email });
+  }
+  async getSingleUserByEmail(email: string): Promise<any> {
     return await this.userModel.findOne({ email: email });
   }
 }

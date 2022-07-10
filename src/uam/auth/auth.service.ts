@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { UsersService } from '../users/users.service';
@@ -13,7 +17,7 @@ export class AuthService {
 
   async validateUserByPassword(loginAttempt: LoginUserDto) {
     // This will be used for the initial login
-    const userToAttempt = await this.usersService.findOneByEmail(
+    const userToAttempt = await this.usersService.getSingleUserByEmail(
       loginAttempt.email,
     );
     return new Promise((resolve, reject) => {
@@ -22,7 +26,9 @@ export class AuthService {
           if (isMatch) {
             resolve(this.createJwtPayload(userToAttempt));
           } else {
-            reject('wrong user credentials');
+            reject(
+              new BadRequestException('User already exists with the email'),
+            );
           }
         });
       } catch (error) {
@@ -33,7 +39,7 @@ export class AuthService {
 
   async validateUserByJwt(payload: JwtPayload) {
     // This will be used when the user has already logged in and has a JWT
-    const user = await this.usersService.findOneByEmail(payload.email);
+    const user = await this.usersService.getSingleUserByEmail(payload.email);
 
     if (user) {
       return this.createJwtPayload(user);
