@@ -14,7 +14,11 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-
+  /**
+   * validating user by password
+   * @param loginAttempt
+   * @returns
+   */
   async validateUserByPassword(loginAttempt: LoginUserDto) {
     // This will be used for the initial login
     const userToAttempt = await this.usersService.getSingleUserByEmail(
@@ -36,7 +40,11 @@ export class AuthService {
       }
     });
   }
-
+  /**
+   * user jwt validation
+   * @param payload
+   * @returns
+   */
   async validateUserByJwt(payload: JwtPayload) {
     // This will be used when the user has already logged in and has a JWT
     const user = await this.usersService.getSingleUserByEmail(payload.email);
@@ -47,7 +55,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
   }
-
+  /**
+   * create user jwt payload
+   * @param user
+   * @returns
+   */
   createJwtPayload(user) {
     const data: JwtPayload = {
       email: user.email,
