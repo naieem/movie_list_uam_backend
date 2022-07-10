@@ -14,7 +14,6 @@ export const UserSchema = new mongoose.Schema({
   },
 });
 
-// NOTE: Arrow functions are not used here as we do not want to use lexical scope for 'this'
 UserSchema.pre('save', function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
