@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MongoDataServices } from './mongodataService.service';
+import { MovieSchema } from './schemas/movie.schema';
 
 @Module({
   imports: [
@@ -11,6 +13,9 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }]),
   ],
+  providers: [MongoDataServices],
+  exports: [MongoDataServices],
 })
 export class DbmoduleModule {}
