@@ -30,13 +30,11 @@ export class AuthService {
           if (isMatch) {
             resolve(this.createJwtPayload(userToAttempt));
           } else {
-            reject(
-              new BadRequestException('User already exists with the email'),
-            );
+            reject(new BadRequestException('Wrong crendentials'));
           }
         });
       } catch (error) {
-        reject(error);
+        reject(new BadRequestException(error));
       }
     });
   }
@@ -46,14 +44,20 @@ export class AuthService {
    * @returns
    */
   async validateUserByJwt(payload: JwtPayload) {
-    // This will be used when the user has already logged in and has a JWT
-    const user = await this.usersService.getSingleUserByEmail(payload.email);
-
-    if (user) {
-      return this.createJwtPayload(user);
-    } else {
-      throw new UnauthorizedException();
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await this.usersService.getSingleUserByEmail(
+          payload.email,
+        );
+        if (user) {
+          resolve(this.createJwtPayload(user));
+        } else {
+          reject(new UnauthorizedException());
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
   /**
    * create user jwt payload
