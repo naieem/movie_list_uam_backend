@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ErrorException } from 'src/utils/error.interception';
 import { DeleteUserDto } from './dto/delete-user.dto';
+import IResponse from '../../utils/IResponse.interface';
 
 @Controller('user')
 export class UsersController {
@@ -15,7 +16,7 @@ export class UsersController {
    * @returns
    */
   @Post('create')
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<IResponse> {
     try {
       const response = await this.usersService.create(createUserDto);
       return { result: response };
@@ -28,7 +29,7 @@ export class UsersController {
    * @returns
    */
   @Get('all')
-  async getAllUser() {
+  async getAllUser(): Promise<IResponse> {
     try {
       const response = await this.usersService.getAllUser();
       return { result: response };
@@ -42,7 +43,9 @@ export class UsersController {
    * @returns
    */
   @Delete('delete')
-  async deleteSingleUserByEmail(@Body() deleteUserDto: DeleteUserDto) {
+  async deleteSingleUserByEmail(
+    @Body() deleteUserDto: DeleteUserDto,
+  ): Promise<IResponse> {
     try {
       const response = await this.usersService.deleteUserByEmail(
         deleteUserDto.email,
