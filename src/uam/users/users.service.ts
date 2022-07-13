@@ -64,7 +64,7 @@ export class UsersService {
    * @param email
    * @returns user
    */
-  async getSingleUserByEmail(email: string): Promise<User> {
+  async getSingleUserByEmail(email: string): Promise<User | any> {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await this.userModel.findOne({ email: email });
