@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ResponseInterceptor } from './utils/response.interceptor';
@@ -13,7 +13,8 @@ async function bootstrap() {
     origin: true,
   });
   app.use(cookieParser());
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new ResponseInterceptor(reflector));
   app.useGlobalFilters(new ErrorException());
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
