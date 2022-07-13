@@ -7,8 +7,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('User') private userModel: Model<User>) {}
-
-  async create(createUserDto: CreateUserDto) {
+  /**
+   * create new user
+   * @param createUserDto
+   * @returns user
+   */
+  async create(createUserDto: CreateUserDto): Promise<User> {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await this.getSingleUserByEmail(createUserDto.email);
@@ -26,7 +30,11 @@ export class UsersService {
       }
     });
   }
-  async getAllUser(): Promise<any> {
+  /**
+   * Get all user data
+   * @returns user[]
+   */
+  async getAllUser(): Promise<User[]> {
     return new Promise(async (resolve, reject) => {
       try {
         const users = await this.userModel.find();
@@ -36,6 +44,11 @@ export class UsersService {
       }
     });
   }
+  /**
+   * Delete user by email
+   * @param email
+   * @returns
+   */
   async deleteUserByEmail(email: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -46,7 +59,12 @@ export class UsersService {
       }
     });
   }
-  async getSingleUserByEmail(email: string): Promise<any> {
+  /**
+   * Query single user by email
+   * @param email
+   * @returns user
+   */
+  async getSingleUserByEmail(email: string): Promise<User> {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await this.userModel.findOne({ email: email });
