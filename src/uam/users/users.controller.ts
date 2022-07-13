@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Delete } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ErrorException } from 'src/utils/error.interception';
+import { DeleteUserDto } from './dto/delete-user.dto';
 
 @Controller('user')
 export class UsersController {
@@ -40,10 +41,12 @@ export class UsersController {
    * @param email
    * @returns
    */
-  @Get('delete')
-  async deleteSingleUserByEmail(email: string) {
+  @Delete('delete')
+  async deleteSingleUserByEmail(@Body() deleteUserDto: DeleteUserDto) {
     try {
-      const response = await this.usersService.deleteUserByEmail(email);
+      const response = await this.usersService.deleteUserByEmail(
+        deleteUserDto.email,
+      );
       return { result: response };
     } catch (error) {
       throw new ErrorException(error);
