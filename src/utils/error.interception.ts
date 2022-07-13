@@ -16,7 +16,7 @@ export class ErrorException implements ExceptionFilter {
     const status = HttpStatus.BAD_REQUEST;
 
     response.status(status).json({
-      // statusCode: exception.errorMsg.status || status,
+      error: true,
       result: exception,
     });
   }
