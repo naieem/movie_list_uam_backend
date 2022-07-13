@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { User } from '../users/user.interface';
 import { UsersService } from '../users/users.service';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
@@ -46,11 +47,13 @@ export class AuthService {
   async validateUserByJwt(payload: JwtPayload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const user = await this.usersService.getSingleUserByEmail(
+        const user: User = await this.usersService.getSingleUserByEmail(
           payload.email,
         );
         if (user) {
-          resolve(this.createJwtPayload(user));
+          resolve({
+            email: user.email,
+          });
         } else {
           reject(new UnauthorizedException());
         }
@@ -64,7 +67,7 @@ export class AuthService {
    * @param user
    * @returns
    */
-  createJwtPayload(user) {
+  createJwtPayload(user: User) {
     const data: JwtPayload = {
       email: user.email,
     };

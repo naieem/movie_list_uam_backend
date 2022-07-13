@@ -23,7 +23,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: 'givethisanewsecret',
     });
   }
-
+  /**
+   * validating jwt token user
+   * @param payload
+   * @returns
+   */
   async validate(payload: JwtPayload) {
     try {
       const user = await this.authService.validateUserByJwt(payload);

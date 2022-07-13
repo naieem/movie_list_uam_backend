@@ -41,10 +41,9 @@ export class AuthController {
   }
   @Get('me')
   @UseGuards(AuthGuard())
-  async loggedInUser(@Req() req: Request): Promise<IResponse> {
+  async loggedInUser(@Req() req: Request | any): Promise<IResponse> {
     try {
-      console.log(req);
-      return { result: 'ioio' };
+      return { result: req?.user };
     } catch (error) {
       throw new ErrorException(error);
     }
