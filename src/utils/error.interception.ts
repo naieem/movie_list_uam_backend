@@ -17,7 +17,7 @@ export class ErrorException implements ExceptionFilter {
 
     response.status(status).json({
       error: true,
-      result: exception,
+      result: exception.errorMsg.response,
     });
   }
 }
