@@ -8,6 +8,10 @@ import { ErrorException } from './utils/error.interception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
   app.use(cookieParser());
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new ErrorException());
