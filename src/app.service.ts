@@ -20,4 +20,12 @@ export class AppService {
       }
     });
   }
+  async movieList(): Promise<Movie[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const movies = await this.mongoDataService.movies.getAll();
+        resolve(movies);
+      } catch (error) {}
+    });
+  }
 }

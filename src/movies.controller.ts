@@ -594,4 +594,13 @@ export class MoviesController {
       throw new ErrorException(error);
     }
   }
+  @Get('list')
+  async moviesList() {
+    try {
+      const movies = await this.appService.movieList();
+      return { result: movies };
+    } catch (error) {
+      throw new ErrorException(error);
+    }
+  }
 }
