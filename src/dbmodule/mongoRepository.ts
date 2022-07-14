@@ -21,6 +21,13 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
   create(item: T): Promise<T> {
     return this._repository.create(item);
   }
+  upsert(item: T, filter: any): any {
+    return this._repository.findOneAndUpdate(
+      filter,
+      { $set: item },
+      { upsert: true },
+    );
+  }
 
   update(id: string, item: T) {
     return this._repository.findByIdAndUpdate(id, item);
