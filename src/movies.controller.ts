@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { PaginationDto } from './dbmodule/Dto/pagination.dto';
 import { Movie } from './dbmodule/interfaces/movie.interface';
 import { ErrorException } from './utils/error.interception';
 
@@ -594,10 +595,10 @@ export class MoviesController {
       throw new ErrorException(error);
     }
   }
-  @Get('list')
-  async moviesList() {
+  @Post('list')
+  async moviesList(@Body() payload: PaginationDto) {
     try {
-      const movies = await this.appService.movieList();
+      const movies = await this.appService.movieList(payload);
       return { result: movies };
     } catch (error) {
       throw new ErrorException(error);

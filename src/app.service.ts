@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { IPaginate } from './dbmodule/interfaces/IPaginationPayload.interface';
 import { Movie } from './dbmodule/interfaces/movie.interface';
 import { MongoDataServices } from './dbmodule/mongodataService.service';
 
@@ -20,12 +21,14 @@ export class AppService {
       }
     });
   }
-  async movieList(): Promise<Movie[]> {
+  async movieList(pagination: IPaginate): Promise<Movie[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const movies = await this.mongoDataService.movies.getAll();
+        const movies = await this.mongoDataService.movies.paginate(pagination);
         resolve(movies);
-      } catch (error) {}
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 }
