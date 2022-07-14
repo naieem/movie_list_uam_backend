@@ -7,7 +7,7 @@ import { JwtPayload } from '../interfaces/jwt-payload.interface';
 function cookieExtractor(req) {
   let token = null;
   if (req && req.cookies) {
-    token = req.cookies['authToken'];
+    token = req.cookies['clientToken'];
   }
   return token;
 }
