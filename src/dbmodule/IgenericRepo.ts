@@ -1,3 +1,5 @@
+import { IPaginate } from './interfaces/IPaginationPayload.interface';
+
 export abstract class IGenericRepository<T> {
   abstract getAll(): Promise<T[]>;
 
@@ -8,4 +10,5 @@ export abstract class IGenericRepository<T> {
   abstract update(id: string, item: T);
 
   abstract upsert(item: T, filter: any): Promise<any>;
+  abstract paginate(payload: IPaginate): Promise<any>;
 }

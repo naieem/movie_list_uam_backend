@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
 import { IGenericRepository } from './IgenericRepo';
+import { IPaginate } from './interfaces/IPaginationPayload.interface';
 
 export class MongoGenericRepository<T> implements IGenericRepository<T> {
   private _repository: Model<T>;
@@ -28,7 +29,29 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
       { upsert: true },
     ) as any;
   }
-
+  async paginate(payload: IPaginate): Promise<any> {
+    const options = {};
+    const query = this._repository.find(options);
+    const page: number = parseInt(payload.pageNumber as any) || 1;
+    const limit = 10;
+    return new Promise(async (resolve, reject) => {
+      try {
+        const total = await this._repository.count(options);
+        const data = await query
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .exec();
+        resolve({
+          data,
+          total,
+          page,
+          last_page: Math.ceil(total / limit),
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
   update(id: string, item: T) {
     return this._repository.findByIdAndUpdate(id, item);
   }
