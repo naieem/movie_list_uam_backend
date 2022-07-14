@@ -11,7 +11,9 @@ export class AppService {
   async insertMovies(movie: Movie): Promise<Movie> {
     return new Promise(async (resolve, reject) => {
       try {
-        const movieResponse = await this.mongoDataService.movies.create(movie);
+        const movieResponse = await this.mongoDataService.movies.upsert(movie, {
+          imdbID: movie.imdbID,
+        });
         resolve(movieResponse);
       } catch (error) {
         reject(new BadRequestException(error));
