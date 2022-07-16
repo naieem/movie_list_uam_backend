@@ -21,9 +21,18 @@ export class AppService {
       }
     });
   }
-  async movieList(pagination: IPaginate): Promise<Movie[]> {
+  async movieList(pagination: IPaginate | any): Promise<Movie[]> {
     return new Promise(async (resolve, reject) => {
       try {
+        let searChArr = [];
+        if (pagination.search) {
+          searChArr = [
+            { Title: new RegExp(pagination.search, 'i') },
+            { Year: new RegExp(pagination.search, 'i') },
+            { imdbID: new RegExp(pagination.search, 'i') },
+          ];
+        }
+        pagination.search = searChArr;
         const movies = await this.mongoDataService.movies.paginate(pagination);
         resolve(movies);
       } catch (error) {
