@@ -1,10 +1,4 @@
-import {
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class PaginationDto {
   @IsNumber()
@@ -15,7 +9,6 @@ export class PaginationDto {
     [key: string]: string;
   };
   @IsString()
-  @MinLength(3)
   @IsOptional()
   search?: string;
 }
