@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, UseGuards, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
-import { AuthGuard } from '@nestjs/passport';
 import { ErrorException } from 'src/utils/error.interception';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import IResponse from '../../utils/IResponse.interface';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -16,6 +17,11 @@ export class UsersController {
    * @returns
    */
   @Post('create')
+  @ApiResponse({
+    status: 201,
+    description: 'User creation done',
+  })
+  @ApiResponse({ status: 400, description: 'User creation errors' })
   async create(@Body() createUserDto: CreateUserDto): Promise<IResponse> {
     try {
       const response = await this.usersService.create(createUserDto);
@@ -29,6 +35,11 @@ export class UsersController {
    * @returns
    */
   @Get('all')
+  @ApiResponse({
+    status: 200,
+    description: 'Getting all users array',
+  })
+  @ApiResponse({ status: 400, description: 'User listing errors' })
   async getAllUser(): Promise<IResponse> {
     try {
       const response = await this.usersService.getAllUser();
@@ -43,6 +54,12 @@ export class UsersController {
    * @returns
    */
   @Delete('delete')
+  @ApiResponse({
+    status: 200,
+    description: 'Deletion of user done',
+  })
+  @ApiResponse({ status: 400, description: 'User deletion errors' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteSingleUserByEmail(
     @Body() deleteUserDto: DeleteUserDto,
   ): Promise<IResponse> {
@@ -54,13 +71,5 @@ export class UsersController {
     } catch (error) {
       throw new ErrorException(error);
     }
-  }
-
-  @Get('test')
-  @UseGuards(AuthGuard())
-  testAuthRoute() {
-    return {
-      message: 'You did it!',
-    };
   }
 }

@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { PaginationDto } from './dbmodule/Dto/pagination.dto';
 import { Movie } from './dbmodule/interfaces/movie.interface';
 import { ErrorException } from './utils/error.interception';
 
+@ApiTags('Movie')
 @Controller('movies')
 export class MoviesController {
   private movieList: Movie[] = [
@@ -580,12 +582,15 @@ export class MoviesController {
   ];
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
   @Post('sync')
   @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Movie data sync done.',
+  })
+  @ApiResponse({ status: 400, description: 'Error while syncing' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async insertMovies() {
     try {
       for (const movie of this.movieList) {
@@ -599,6 +604,13 @@ export class MoviesController {
   }
   @Post('list')
   @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 201,
+    description: 'Movie listing.',
+  })
+  @ApiResponse({ status: 400, description: 'Error while listing movie' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async moviesList(@Body() payload: PaginationDto) {
     try {
       const movies = await this.appService.movieList(payload);
