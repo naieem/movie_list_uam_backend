@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AppService } from './app.service';
 import { PaginationDto } from './dbmodule/Dto/pagination.dto';
 import { Movie } from './dbmodule/interfaces/movie.interface';
@@ -584,6 +585,7 @@ export class MoviesController {
     return this.appService.getHello();
   }
   @Post('sync')
+  @UseGuards(AuthGuard())
   async insertMovies() {
     try {
       for (const movie of this.movieList) {
@@ -596,6 +598,7 @@ export class MoviesController {
     }
   }
   @Post('list')
+  @UseGuards(AuthGuard())
   async moviesList(@Body() payload: PaginationDto) {
     try {
       const movies = await this.appService.movieList(payload);
