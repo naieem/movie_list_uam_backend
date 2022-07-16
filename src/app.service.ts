@@ -25,12 +25,27 @@ export class AppService {
     return new Promise(async (resolve, reject) => {
       try {
         let searChArr = [];
+        const acceptedSortProperty = ['Title', 'Year'];
+        const acceptedValue = ['asc', 'desc'];
         if (pagination.search) {
           searChArr = [
             { Title: new RegExp(pagination.search, 'i') },
             { Year: new RegExp(pagination.search, 'i') },
             { imdbID: new RegExp(pagination.search, 'i') },
           ];
+        }
+        if (pagination.sort) {
+          for (const key in pagination.sort) {
+            if (
+              !acceptedSortProperty.includes(key) ||
+              !acceptedValue.includes(pagination.sort[key])
+            ) {
+              throw new BadRequestException(
+                'sort property or value not valid.Expected properties are ' +
+                  acceptedSortProperty.join(','),
+              );
+            }
+          }
         }
         pagination.search = searChArr;
         const movies = await this.mongoDataService.movies.paginate(pagination);

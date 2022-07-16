@@ -1,8 +1,6 @@
 export interface IPaginate {
   pageNumber: number;
-  sort?: {
-    [key: string]: string;
-  };
+  sort?: any;
   search?: {
     [key: string]: string;
   }[];

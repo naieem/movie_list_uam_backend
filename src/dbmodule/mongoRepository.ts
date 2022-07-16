@@ -37,6 +37,9 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
       };
     }
     const query = this._repository.find(options);
+    if (payload.sort) {
+      query.sort(payload.sort);
+    }
     const page: number = parseInt(payload.pageNumber as any) || 1;
     const limit = 10;
     return new Promise(async (resolve, reject) => {
