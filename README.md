@@ -22,7 +22,7 @@ The microservice will start 4000 by default.But you can change it from env file.
  ### Steps
  1. Create a new user from User endpoints.
  2. Login with that user from auth endpoints.
- 3. As soon as you login the token will be stored in the cookie and also you can use it in header bearer token also.
+ 3. As soon as you login the token will be stored in the cookie and also you can use it in header bearer token also.The validity of the token will be 15 mins.
  4. Now you can just run the sync endpoint for syncing all movies into database.
 
  Thus you can store demo movies into db. Now enjoy running frontend.
