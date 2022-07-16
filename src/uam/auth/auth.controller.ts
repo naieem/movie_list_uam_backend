@@ -48,4 +48,14 @@ export class AuthController {
       throw new ErrorException(error);
     }
   }
+  @Post('logout')
+  @UseGuards(AuthGuard())
+  @IsPublic(true) // to avoid generic reponse
+  async logout(@Res({ passthrough: true }) response: Response) {
+    try {
+      response.clearCookie('clientToken').send({ result: 'Loggout' });
+    } catch (error) {
+      throw new ErrorException(error);
+    }
+  }
 }
