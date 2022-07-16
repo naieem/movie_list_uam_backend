@@ -30,7 +30,12 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
     ) as any;
   }
   async paginate(payload: IPaginate): Promise<any> {
-    const options = {};
+    let options = {};
+    if (payload.search && payload.search.length) {
+      options = {
+        $or: [...payload.search],
+      };
+    }
     const query = this._repository.find(options);
     const page: number = parseInt(payload.pageNumber as any) || 1;
     const limit = 10;
