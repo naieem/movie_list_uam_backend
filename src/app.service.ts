@@ -6,9 +6,11 @@ import { MongoDataServices } from './dbmodule/mongodataService.service';
 @Injectable()
 export class AppService {
   constructor(private mongoDataService: MongoDataServices) {}
-  getHello(): string {
-    return 'Hello World!';
-  }
+  /**
+   * insert movies into database
+   * @param movie
+   * @returns
+   */
   async insertMovies(movie: Movie): Promise<Movie> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -21,6 +23,11 @@ export class AppService {
       }
     });
   }
+  /**
+   * getting movie list
+   * @param pagination
+   * @returns
+   */
   async movieList(pagination: IPaginate | any): Promise<Movie[]> {
     return new Promise(async (resolve, reject) => {
       try {
